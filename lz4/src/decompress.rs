@@ -76,10 +76,13 @@ impl<'a> Decoder<'a> {
     fn duplicate(&mut self, start: usize, match_length: usize) {
         // We cannot simply use memcpy or `extend_from_slice`, because these do not allow
         // self-referential copies: http://ticki.github.io/img/lz4_runs_encoding_diagram.svg
+        let mut o : Vec<u8> = Vec::new();
         for i in start..start + match_length {
             let b = self.output[i];
             self.output.push(b);
+            o.push(b);
         }
+        eprintln!("{:?}", String::from_utf8(o));
     }
 
     /// Read an integer LSIC (linear small integer code) encoded.
